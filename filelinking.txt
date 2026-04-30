@@ -1,1 +1,1 @@
-mklink "outputFilePath" "inputFilePath"
+mklink "C:\Users\phomm\AppData\Roaming\PrismLauncher\instances\1.21.8\minecraft\minescript\.py" "C:\Github\Scripts-For-MCSMP\shearsheep.py"
