@@ -11,22 +11,6 @@ def textPrint(text):
         with open(r"C:\Github\Scripts-For-MCSMP\log.log", "a") as f: #appending to a textfile
             f.write("Error when appending\n\n\n")
 
-def viewEntityInformation(entity):
-    try:
-        info = (
-            f"name={entity.name}, \n"
-            f"type={entity.type}, \n"
-            f"pos={entity.position}, \n"
-            f"health={entity.health}"
-        )
-
-        nbt = str(entity.nbt)
-        prettynbt = nbt.replace(",", ",\n").replace("{", "{\n").replace("}", "\n}")
-
-        textPrint(f"{info}\n{prettynbt}")
-    except:
-        textPrint("Error in printing entity information")
-
 def distanceBetween(pos1, pos2):
     return math.sqrt((pos1[0]-pos2[0])**2+(pos1[1]-pos2[1])**2+(pos1[2]-pos2[2])**2)
 
@@ -70,8 +54,6 @@ def findTargetWool():
     return tWool
 
 def main():
-    target = mcs.player_get_targeted_entity(nbt=True)
-    viewEntityInformation(target)
     mcs.player_press_forward(True)
     mcs.player_press_use(True)
     while True:

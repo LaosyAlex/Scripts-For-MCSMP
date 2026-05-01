@@ -1,2 +1,2 @@
-mklink "C:\Users\phomm\AppData\Roaming\PrismLauncher\instances\1.21.8\minecraft\minescript\.py" "C:\Github\Scripts-For-MCSMP\shearsheep.py"
+mklink "C:\Users\phomm\AppData\Roaming\PrismLauncher\instances\1.21.8_Macro\minecraft\minescript\breedsheep.py" "C:\Github\Scripts-For-MCSMP\breedsheep.py
 C:\Users\phomm\AppData\Local\Python\bin\python.exe -m pip install nbtlib

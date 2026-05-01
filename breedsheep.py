@@ -1,0 +1,1 @@
+import minescript as mcs #type: ignore
