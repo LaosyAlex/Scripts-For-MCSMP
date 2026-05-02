@@ -1,6 +1,6 @@
 import minescript as mcs # type: ignore
 import math
-import time
+import winsound
 
 def textPrint(text):
     try:
@@ -31,16 +31,6 @@ def findTargetSheep():
 
     return tSheep
 
-def logAllEntities():
-    entities = mcs.entities()
-    for e in entities:
-        textPrint(str(e))
-
-def logAllItemEntities():
-    entities = mcs.entities(type="entity.minecraft.item")
-    for e in entities:
-            textPrint(str(e))
-
 def findTargetWool():
     player = mcs.player()
     tWool = None
@@ -53,23 +43,34 @@ def findTargetWool():
 
     return tWool
 
+def allInvSlotsFilled():
+    inv = mcs.player_inventory()
+    filledSlots = {item.slot for item in inv}
+
+    return set(range(36)).issubset(filledSlots) #Is slots 0-35 a subset of the filled slots
+
+
 def main():
-    mcs.player_press_forward(True)
-    mcs.player_press_use(True)
-    while True:
-        targetSheep = findTargetSheep()
-        targetWool = findTargetWool()
+    try:
+        mcs.player_press_forward(True)
+        mcs.player_press_use(True)
+        while True:
+            targetSheep = findTargetSheep()
+            targetWool = findTargetWool()
 
-        if targetWool != None:
-            posW = targetWool.position
-            mcs.player_look_at(posW[0],posW[1],posW[2])
-        elif targetSheep != None:
-            posT = targetSheep.position
-            mcs.player_look_at(posT[0],posT[1],posT[2])
-            
-
-
-        
+            if allInvSlotsFilled():
+                winsound.Beep(1000, 300)
+                textPrint("All inventory slots are full")
+                return
+            elif targetWool != None:
+                posW = targetWool.position
+                mcs.player_look_at(posW[0],posW[1],posW[2])
+            elif targetSheep != None:
+                posT = targetSheep.position
+                mcs.player_look_at(posT[0],posT[1],posT[2])
+    finally:
+        mcs.player_press_forward(False)
+        mcs.player_press_use(False)
 
 if __name__ == "__main__":
     open(r"C:\Github\Scripts-For-MCSMP\log.log", "w").close() #wipes previous log data

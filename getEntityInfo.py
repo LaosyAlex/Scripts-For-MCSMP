@@ -30,4 +30,5 @@ def main():
     viewEntityInformation(target)
 
 if __name__ == "__main__":
+    open(r"C:\Github\Scripts-For-MCSMP\log.log", "w").close()
     main()
