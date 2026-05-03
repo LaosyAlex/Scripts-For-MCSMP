@@ -1,4 +1,5 @@
 import minescript as mcs # type: ignore
+from minescript_plus import Inventory, Screen #type: ignore 
 import math
 import winsound
 
@@ -49,6 +50,52 @@ def allInvSlotsFilled():
 
     return set(range(36)).issubset(filledSlots) #Is slots 0-35 a subset of the filled slots
 
+chestCoord = None
+
+def setChest():
+    global chestCoord
+
+    world = mcs.world_info()
+    name = world.name
+
+    if name == "bot-sheep sheer test":
+        chestCoord = [-315,66,-3]
+    elif name == "Alex's World":
+        chestCoord = [2924, 67, 777]
+
+def storeInChest():
+    if chestCoord is None:
+        textPrint(f"No chest coord set for world: {mcs.world_info().name}")
+        return
+
+    player = mcs.player()
+
+    mcs.player_press_forward(True)
+    mcs.chat(f"Moving to chest {chestCoord[0]}, {chestCoord[1]}, {chestCoord[2]}")
+    while distanceBetween(player.position, chestCoord) > 2:
+        player = mcs.player()
+        mcs.player_look_at(chestCoord[0],chestCoord[1], chestCoord[2])
+    mcs.chat("Arrived at Chest")
+
+    Inventory.open_targeted_chest()
+
+    current_screen = mcs.screen_name()
+    mcs.chat(f"Got Screen:{current_screen}")
+    #Large Chest
+    if current_screen is not None and (current_screen == "Large Chest"):
+        mcs.chat("Inventory protocal")
+
+        inv = mcs.player_inventory()
+        woolSlots = [e for e in inv if "wool" in e.item.lower()]
+        for e in woolSlots:
+            slot = e.slot
+            if slot <= 8:
+                slot += 81
+            else:
+                slot += (54-9)
+            mcs.chat(f"slot:{slot}, Item:{e.item}")
+            Inventory.shift_click_slot(slot)
+
 
 def main():
     try:
@@ -74,4 +121,5 @@ def main():
 
 if __name__ == "__main__":
     open(r"C:\Github\Scripts-For-MCSMP\log.log", "w").close() #wipes previous log data
-    main()
+    setChest()
+    storeInChest()

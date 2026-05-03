@@ -1,4 +1,8 @@
 import minescript as mcs #type: ignore
+from minescript_plus import Util #type: ignore
+
+# Notes: Enchanted items have an nbt of None and the nbt data is trimmed anyway.
+#           Solution? Java classes aka make your own mod
 
 def textPrint(text):
     try:
@@ -17,10 +21,18 @@ def logPlayerInvetory():
     except:
         textPrint("Error in printing inventory information")
 
+def logHandItemDurability():
+    try:
+        item = mcs.player_hand_item()
+        item = item['main_hand']
+        nbt = nbt.item
+
+    except:
+        textPrint("Error in nbt")
+
 def main():
     open(r"C:\Github\Scripts-For-MCSMP\log.log", "w").close()
     logPlayerInvetory()
-
 
 if __name__ == "__main__":
     main()

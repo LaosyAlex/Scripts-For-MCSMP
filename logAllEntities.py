@@ -1,5 +1,4 @@
 import minescript as mcs #type: ignore
-import winsound
 
 def textPrint(text):
     try:
