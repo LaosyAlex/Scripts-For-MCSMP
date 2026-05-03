@@ -20,16 +20,7 @@ def logPlayerInvetory():
             textPrint(str(item))
     except:
         textPrint("Error in printing inventory information")
-
-def logHandItemDurability():
-    try:
-        item = mcs.player_hand_item()
-        item = item['main_hand']
-        nbt = nbt.item
-
-    except:
-        textPrint("Error in nbt")
-
+        
 def main():
     open(r"C:\Github\Scripts-For-MCSMP\log.log", "w").close()
     logPlayerInvetory()

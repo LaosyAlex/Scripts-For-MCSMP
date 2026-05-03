@@ -2,6 +2,7 @@ import minescript as mcs # type: ignore
 from minescript_plus import Inventory, Screen #type: ignore 
 import math
 import winsound
+import time
 
 def textPrint(text):
     try:
@@ -68,6 +69,8 @@ def storeInChest():
         textPrint(f"No chest coord set for world: {mcs.world_info().name}")
         return
 
+    mcs.player_press_use(False)
+
     player = mcs.player()
 
     mcs.player_press_forward(True)
@@ -76,7 +79,7 @@ def storeInChest():
         player = mcs.player()
         mcs.player_look_at(chestCoord[0],chestCoord[1], chestCoord[2])
     mcs.chat("Arrived at Chest")
-
+    
     Inventory.open_targeted_chest()
 
     current_screen = mcs.screen_name()
@@ -96,19 +99,51 @@ def storeInChest():
             mcs.chat(f"slot:{slot}, Item:{e.item}")
             Inventory.shift_click_slot(slot)
 
+        Screen.close_screen()
+    else:
+        Screen.close_screen()
+        mcs.chat("error")
+        return
+
+newShears = []
+currentShears = None
+
+def logShears():
+    global newShears
+    inv = mcs.player_inventory()
+    newShears = [slot.slot for slot in inv if slot.item == "minecraft:shears" and slot.slot <= 8]
 
 def main():
     try:
+        setChest()
+        logShears()
         mcs.player_press_forward(True)
         mcs.player_press_use(True)
+
+        currentShears = newShears[0]
+        mcs.player_inventory_select_slot(currentShears)
+
         while True:
+            mcs.player_press_forward(True)
+            mcs.player_press_use(True)
+
             targetSheep = findTargetSheep()
             targetWool = findTargetWool()
 
             if allInvSlotsFilled():
-                winsound.Beep(1000, 300)
-                textPrint("All inventory slots are full")
-                return
+                mcs.player_press_use(False)
+                storeInChest()
+
+                del newShears[0]
+
+                if len(newShears) == 0:
+                    winsound.Beep(1000, 300)
+                    mcs.echo("All shears have been used")
+                    return
+                else:
+                    currentShears = newShears[0]
+                    mcs.player_inventory_select_slot(currentShears)
+
             elif targetWool != None:
                 posW = targetWool.position
                 mcs.player_look_at(posW[0],posW[1],posW[2])
@@ -121,5 +156,4 @@ def main():
 
 if __name__ == "__main__":
     open(r"C:\Github\Scripts-For-MCSMP\log.log", "w").close() #wipes previous log data
-    setChest()
-    storeInChest()
+    main()
